@@ -2,7 +2,8 @@ pub struct Solution;
 impl Solution {
     #[must_use]
     pub fn remove_subfolders(mut folders: Vec<String>) -> Vec<String> {
-        folders.sort();
+        //folders.sort();
+        folders.sort_unstable(); // I hope it more faster :D
         let mut now = folders[0].clone();
         folders.into_iter().fold(Vec::new(), |mut acc, folder| {
             if !is_parent(&now, &folder) {

@@ -41,7 +41,7 @@ mod tests {
     use super::Solution;
     fn test(s: &str, expect: &str) {
         let solution = Solution::longest_palindrome(s.to_string());
-        assert_eq!(solution, expect.to_string());
+        assert_eq!(solution, expect);
     }
     #[test]
     fn test_1() {

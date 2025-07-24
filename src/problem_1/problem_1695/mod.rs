@@ -2,22 +2,31 @@ pub struct Solution;
 impl Solution {
     #[must_use]
     #[allow(clippy::cast_possible_wrap)]
+    #[allow(clippy::needless_pass_by_value)]
     #[allow(clippy::cast_possible_truncation)]
-    // too slow
+    // slow and high memory
     pub fn maximum_unique_subarray(nums: Vec<i32>) -> i32 {
         use std::collections::HashMap;
-        let mut current = 0;
         let mut map = HashMap::new();
-        nums.into_iter()
+        let mut current = 0;
+        let mut current_index = 0;
+        let mut iter = nums.iter();
+        nums.iter()
             .enumerate()
             .map(|(index, value)| {
+                current += value;
                 if let Some(old) = map.insert(value, index) {
-                    current = old.max(current);
+                    if old >= current_index {
+                        current_index = old + 1;
+                        for i in iter.by_ref() {
+                            current -= i;
+                            if i == value {
+                                break;
+                            }
+                        }
+                    }
                 }
-                map.iter()
-                    .filter(|(_, index)| **index >= current)
-                    .map(|(value, _)| value)
-                    .sum()
+                current
             })
             .max()
             .unwrap_or_default()
@@ -41,5 +50,17 @@ mod tests {
     #[test]
     fn test_3() {
         test(&[1], 1);
+    }
+    #[test]
+    fn test_4() {
+        test(&[1, 2, 4, 1, 1, 3], 7);
+    }
+    #[test]
+    fn test_5() {
+        test(&[1, 2, 4, 1, 1, 3, 4], 8);
+    }
+    #[test]
+    fn test_6() {
+        test(&[1, 2, 4, 1, 1, 9], 10);
     }
 }

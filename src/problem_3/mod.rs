@@ -1,3 +1,4 @@
+pub mod problem_3622;
 pub struct Solution;
 use std::collections::HashMap;
 impl Solution {
